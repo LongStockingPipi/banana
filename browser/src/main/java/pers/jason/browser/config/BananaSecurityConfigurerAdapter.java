@@ -28,16 +28,25 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
-        .authorizeRequests()
-        .anyRequest().authenticated()
-        .and()
+        //配置认证处理
+//        .authenticationProvider(authenticationProvider())
         //登录配置
         .formLogin()
         .loginPage(securityProperties.getLoginPage())
         .loginProcessingUrl(securityProperties.getAuthRequestUri())
         .permitAll()
         .successHandler(defaultAuthenticationSuccessHandler)
-        .failureHandler(defaultAuthenticationFailedHandler);
+        .failureHandler(defaultAuthenticationFailedHandler)
+        //通用配置
+        .and()
+        .authorizeRequests()
+        .antMatchers(securityProperties.getLoginPage(), securityProperties.getAuthRequestUri())
+        .permitAll()
+        .anyRequest() // 任何请求
+        .authenticated()
+        .and()
+        .csrf().disable()
+        ;
   }
 
 }

@@ -22,9 +22,9 @@ import java.io.IOException;
  */
 public class DefaultAuthenticationFailedHandler extends SimpleUrlAuthenticationFailureHandler {
 
-  private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
-  private SecurityProperties bananaProperties;
+  private final SecurityProperties bananaProperties;
 
   private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
@@ -39,7 +39,9 @@ public class DefaultAuthenticationFailedHandler extends SimpleUrlAuthenticationF
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response
       , AuthenticationException exception) throws IOException, ServletException {
-    logger.info("login failed");
+
+    final String exceptionMessage = exception.getMessage();
+    logger.info("login failed {}", exceptionMessage);
 
     final String uri = request.getRequestURI();
     final String jsonRequestUri = bananaProperties.getRequestUriWithAjax();
@@ -48,7 +50,7 @@ public class DefaultAuthenticationFailedHandler extends SimpleUrlAuthenticationF
 
       //request with ajax
       AuthenticationResponse authenticationResponse
-          = new AuthenticationResponse(false, "login failed");
+          = new AuthenticationResponse(false, exceptionMessage);
 
       response.setStatus(HttpStatus.UNAUTHORIZED.value());
       response.setContentType("application/json;charset=UTF-8");

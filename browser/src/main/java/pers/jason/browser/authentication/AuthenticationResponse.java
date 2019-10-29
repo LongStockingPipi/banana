@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @Date 2019/10/28 17:31
  */
 public class AuthenticationResponse implements Serializable {
+
   private static final long serialVersionUID = 6926199754841793138L;
 
   private String message;
@@ -27,4 +28,19 @@ public class AuthenticationResponse implements Serializable {
     return success;
   }
 
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public Boolean getSuccess() {
+    return success;
+  }
+
+  public void setSuccess(Boolean success) {
+    this.success = success;
+  }
 }

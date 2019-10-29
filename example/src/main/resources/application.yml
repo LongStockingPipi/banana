@@ -1,9 +1,17 @@
+# server config
 server:
   port: 8090
+
+# log config
 logging:
   file: banana.log
 
+#spring config
+spring:
+  thymeleaf:
+    cache: false
 
+#banana security config
 security:
   requestUriWithAjax: /api
   loginPage: /page/login

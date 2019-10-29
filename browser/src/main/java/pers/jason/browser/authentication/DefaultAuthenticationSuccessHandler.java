@@ -28,7 +28,7 @@ public class DefaultAuthenticationSuccessHandler extends SimpleUrlAuthentication
 
   private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultAuthenticationFailedHandler.class);
+  private static final Logger logger = LoggerFactory.getLogger(DefaultAuthenticationSuccessHandler.class);
 
   public DefaultAuthenticationSuccessHandler(ObjectMapper objectMapper, SecurityProperties normalProperties) {
     super();
@@ -49,7 +49,6 @@ public class DefaultAuthenticationSuccessHandler extends SimpleUrlAuthentication
       AuthenticationResponse authenticationResponse
           = new AuthenticationResponse(true, "login success");
 
-      response.setStatus(HttpStatus.UNAUTHORIZED.value());
       response.setContentType("application/json;charset=UTF-8");
       response.getWriter().write(objectMapper.writeValueAsString(authenticationResponse));
     } else {
