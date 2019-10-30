@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import pers.jason.core.property.SecurityProperties;
+
+import javax.sql.DataSource;
 
 /**
  * @Author 姜治昊
@@ -15,6 +18,12 @@ import pers.jason.core.property.SecurityProperties;
  */
 @Configuration
 public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+
+  @Autowired
+  private DataSource dataSource;
+
+  @Autowired
+  private UserDetailsService userDetailsService;
 
   @Autowired
   private SecurityProperties securityProperties;
@@ -28,21 +37,20 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
-        //配置认证处理
-//        .authenticationProvider(authenticationProvider())
-        //登录配置
+        //username and password authentication configuration
         .formLogin()
         .loginPage(securityProperties.getLoginPage())
         .loginProcessingUrl(securityProperties.getAuthRequestUri())
         .permitAll()
         .successHandler(defaultAuthenticationSuccessHandler)
         .failureHandler(defaultAuthenticationFailedHandler)
-        //通用配置
+
+        //universal configuration
         .and()
         .authorizeRequests()
         .antMatchers(securityProperties.getLoginPage(), securityProperties.getAuthRequestUri())
         .permitAll()
-        .anyRequest() // 任何请求
+        .anyRequest()
         .authenticated()
         .and()
         .csrf().disable()

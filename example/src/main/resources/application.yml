@@ -8,6 +8,13 @@ logging:
 
 #spring config
 spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/banana?&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: Hongdou@521
+    hikari:
+      maximum-pool-size: 30
   thymeleaf:
     cache: false
 

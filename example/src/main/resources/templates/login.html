@@ -9,8 +9,8 @@
     <h1>login page</h1>
 
     <form>
-        <input type="text" name="username" id="username" value="qwert"/>
-        <input type="password" name="password" id="passwd" value="123456"/>
+        用户名：<input type="text" name="username" id="username" value="qwert"/>
+        密码：<input type="password" name="password" id="passwd" value="123456"/>
         <input type="button" value="login" th:onclick="'javascript:login()'"/>
     </form>
 
@@ -34,7 +34,7 @@
         }
 
         let url = '/api/auth';
-        $.post(url, {username: username, password: passwd, }, function (data) {
+        $.post(url, {username: username, password: passwd, rememberMe: $("rememberMe").val()}, function (data) {
             console.info(data);
             if(data.success == true) {
                 window.location.href = "/page/index";
