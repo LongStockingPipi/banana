@@ -1,6 +1,5 @@
 package pers.jason.db.support;
 
-import javax.inject.Singleton;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
