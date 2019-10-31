@@ -57,7 +57,7 @@ public class DefaultAuthenticationFailedHandler extends SimpleUrlAuthenticationF
       response.getWriter().write(objectMapper.writeValueAsString(authenticationResponse));
     } else {
 
-      //request from page
+      // request from page
       // redirect to login page with error message
       redirectStrategy.sendRedirect(request, response, bananaProperties.getLoginPage());
     }

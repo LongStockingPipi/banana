@@ -12,4 +12,5 @@ import pers.jason.core.property.SecurityProperties;
 @Configuration
 @EnableConfigurationProperties(SecurityProperties.class)
 public class CoreConfig {
+
 }

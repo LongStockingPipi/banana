@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import pers.jason.browser.authentication.DefaultAuthenticationFailedHandler;
 import pers.jason.browser.authentication.DefaultAuthenticationSuccessHandler;
+import pers.jason.browser.authentication.captcha.sms.SmsCaptchaGenerator;
 import pers.jason.core.property.SecurityProperties;
 
 /**
@@ -25,7 +26,7 @@ public class BeanConfig {
   private ObjectMapper objectMapper;
 
   @Autowired
-  private SecurityProperties normalProperties;
+  private SecurityProperties securityProperties;
 
   @Bean
   public PasswordEncoder passwordEncoder(){
@@ -36,7 +37,7 @@ public class BeanConfig {
   @ConditionalOnMissingBean({SimpleUrlAuthenticationSuccessHandler.class})
   public SimpleUrlAuthenticationSuccessHandler defaultAuthenticationSuccessHandler() {
     SimpleUrlAuthenticationSuccessHandler handler =
-        new DefaultAuthenticationSuccessHandler(objectMapper, normalProperties);
+        new DefaultAuthenticationSuccessHandler(objectMapper, securityProperties);
     return handler;
   }
 
@@ -44,8 +45,16 @@ public class BeanConfig {
   @ConditionalOnMissingBean({SimpleUrlAuthenticationFailureHandler.class})
   public SimpleUrlAuthenticationFailureHandler defaultAuthenticationFailedHandler() {
     SimpleUrlAuthenticationFailureHandler handler =
-        new DefaultAuthenticationFailedHandler(objectMapper, normalProperties);
+        new DefaultAuthenticationFailedHandler(objectMapper, securityProperties);
     return handler;
+  }
+
+  @Bean
+  @ConditionalOnMissingBean({SmsCaptchaGenerator.class})
+  public SmsCaptchaGenerator smsCaptchaGenerator() {
+    SmsCaptchaGenerator smsCaptchaGenerator =
+        new SmsCaptchaGenerator(securityProperties);
+    return smsCaptchaGenerator;
   }
 
 }

@@ -53,7 +53,7 @@ public class DefaultAuthenticationSuccessHandler extends SimpleUrlAuthentication
       response.getWriter().write(objectMapper.writeValueAsString(authenticationResponse));
     } else {
 
-      //request from page
+      // request from page
       // redirect to login page with error message
       redirectStrategy.sendRedirect(request, response, normalProperties.getWelcomePage());
     }

@@ -1,15 +1,16 @@
-package pers.jason.browser.config;
+package pers.jason.browser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import pers.jason.browser.authentication.AuthFilterConfig;
+import pers.jason.browser.authentication.authtype.AuthenticationTypeConfig;
 import pers.jason.core.property.SecurityProperties;
 
-import javax.sql.DataSource;
+import java.util.Map;
 
 /**
  * @Author 姜治昊
@@ -20,10 +21,7 @@ import javax.sql.DataSource;
 public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
   @Autowired
-  private DataSource dataSource;
-
-  @Autowired
-  private UserDetailsService userDetailsService;
+  private AuthFilterConfig authFilterConfig;
 
   @Autowired
   private SecurityProperties securityProperties;
@@ -34,9 +32,18 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
   @Autowired
   private SimpleUrlAuthenticationSuccessHandler defaultAuthenticationSuccessHandler;
 
+  @Autowired
+  private Map<String, AuthenticationTypeConfig> authenticationTypeConfigMap;
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+    String configName = securityProperties.getAuthType();
+    AuthenticationTypeConfig authenticationTypeConfig = authenticationTypeConfigMap.get(configName);
     http
+        .apply(authFilterConfig)
+        .and()
+        .apply(authenticationTypeConfig)
+        .and()
         //username and password authentication configuration
         .formLogin()
         .loginPage(securityProperties.getLoginPage())
@@ -48,7 +55,8 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
         //universal configuration
         .and()
         .authorizeRequests()
-        .antMatchers(securityProperties.getLoginPage(), securityProperties.getAuthRequestUri())
+        .antMatchers(securityProperties.getLoginPage(), securityProperties.getAuthRequestUri()
+            , "/captcha/*", "/captcha/validate/*/**")
         .permitAll()
         .anyRequest()
         .authenticated()

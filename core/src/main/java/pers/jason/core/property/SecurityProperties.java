@@ -30,6 +30,37 @@ public class SecurityProperties {
    */
   private String authRequestUri = "/";
 
+  /**
+   * 认证类型
+   */
+  private String authType = "account";
+
+  /**
+   * 是否开启校验码认证
+   */
+  private Boolean useCaptcha = false;
+
+  /**
+   * 短信验证码长度
+   */
+  private Integer smsCodeLength = 4;
+
+  /**
+   * 验证码参数名
+   */
+  private String validateCodeParamName = "validate_code";
+
+  /**
+   * 校验码的过期时间，单位是秒
+   */
+  private Long expireTime = 60L;
+
+  /**
+   * 手机号参数
+   */
+  private String mobileNumParamName = "auth_tel";
+
+
   public String getRequestUriWithAjax() {
     return requestUriWithAjax;
   }
@@ -60,5 +91,54 @@ public class SecurityProperties {
 
   public void setAuthRequestUri(String authRequestUri) {
     this.authRequestUri = authRequestUri;
+  }
+
+
+  public Integer getSmsCodeLength() {
+    return smsCodeLength;
+  }
+
+  public void setSmsCodeLength(Integer smsCodeLength) {
+    this.smsCodeLength = smsCodeLength;
+  }
+
+  public String getValidateCodeParamName() {
+    return validateCodeParamName;
+  }
+
+  public void setValidateCodeParamName(String validateCodeParamName) {
+    this.validateCodeParamName = validateCodeParamName;
+  }
+
+  public Long getExpireTime() {
+    return expireTime;
+  }
+
+  public void setExpireTime(Long expireTime) {
+    this.expireTime = expireTime;
+  }
+
+  public String getMobileNumParamName() {
+    return mobileNumParamName;
+  }
+
+  public void setMobileNumParamName(String mobileNumParamName) {
+    this.mobileNumParamName = mobileNumParamName;
+  }
+
+  public Boolean getUseCaptcha() {
+    return useCaptcha;
+  }
+
+  public void setUseCaptcha(Boolean useCaptcha) {
+    this.useCaptcha = useCaptcha;
+  }
+
+  public String getAuthType() {
+    return authType;
+  }
+
+  public void setAuthType(String authType) {
+    this.authType = authType;
   }
 }
