@@ -24,6 +24,8 @@ public class UserServiceImpl implements UserService {
 
   private static final Map<String, User> usernameAndPassWd;
 
+  private static final Map<String, User> mobileAndUser;
+
   static {
     usernameAndPassWd = Maps.newHashMap();
     User user1 = new User();
@@ -43,6 +45,16 @@ public class UserServiceImpl implements UserService {
     user2.setUsername("asdfg");
     user2.setPassword("234567");
     usernameAndPassWd.put("asdfg", user2);
+
+    mobileAndUser = Maps.newHashMap();
+    User user3 = new User();
+    user3.setCnName("小刚");
+    user3.setEnName("Xiaogang");
+    user3.setId(10013L);
+    user3.setEmail("1234qwer@qq.com");
+    user3.setTel("18321843010");
+
+    mobileAndUser.put("18321843010", user3);
   }
 
   @Override
@@ -57,6 +69,24 @@ public class UserServiceImpl implements UserService {
       throw new AuthenticationFailedException("no user username is '" + username + " '");
     }
 
+    return user;
+  }
+
+  @Override
+  public User findByUsernameOrPhoneNumber(String s) {
+    logger.debug("auth request: " + s);
+
+    if(StringUtils.isEmpty( s)) {
+      throw new AuthenticationFailedException("username can not be null");
+    }
+    User user = usernameAndPassWd.get(s);
+    if(null == user) {
+      user = mobileAndUser.get(s);
+    }
+
+    if(null == user || null == user.getId()) {
+      throw new AuthenticationFailedException("no user username or phone number is '" + s + " '");
+    }
     return user;
   }
 

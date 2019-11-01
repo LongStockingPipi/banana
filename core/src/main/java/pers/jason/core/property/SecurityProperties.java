@@ -53,12 +53,14 @@ public class SecurityProperties {
   /**
    * 校验码的过期时间，单位是秒
    */
-  private Long expireTime = 60L;
+  private Long expireTime = 600L;
 
   /**
    * 手机号参数
    */
-  private String mobileNumParamName = "auth_tel";
+  private String mobileNumParamName = "mobile";
+
+  private Boolean needCaptcha = false;
 
 
   public String getRequestUriWithAjax() {
@@ -140,5 +142,13 @@ public class SecurityProperties {
 
   public void setAuthType(String authType) {
     this.authType = authType;
+  }
+
+  public Boolean getNeedCaptcha() {
+    return needCaptcha;
+  }
+
+  public void setNeedCaptcha(Boolean needCaptcha) {
+    this.needCaptcha = needCaptcha;
   }
 }

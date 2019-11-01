@@ -35,5 +35,5 @@ public abstract class AuthenticationTypeConfig extends SecurityConfigurerAdapter
     this.paramName = paramName;
   }
 
-  protected abstract AuthenticationType getAuthType();
+  public abstract AuthenticationType getAuthType();
 }

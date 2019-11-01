@@ -9,4 +9,6 @@ public interface UserService {
 
   User findUserByUsername(String username);
 
+  User findByUsernameOrPhoneNumber(String s);
+
 }

@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
-import pers.jason.browser.authentication.DefaultAuthenticationFailedHandler;
-import pers.jason.browser.authentication.DefaultAuthenticationSuccessHandler;
 import pers.jason.browser.authentication.authtype.AuthenticationTypeConfig;
 import pers.jason.core.support.AuthenticationType;
-
-import java.util.HashMap;
-import java.util.Map;
+import pers.jason.core.support.Properties;
 
 import static pers.jason.core.support.AuthenticationType.mobile;
 
@@ -28,39 +26,40 @@ public class MobileAuthenticationConfig extends AuthenticationTypeConfig {
   private UserDetailsService userDetailsService;
 
   @Autowired
-  private DefaultAuthenticationFailedHandler authenticationFailedHandler;
+  private Properties properties;
 
   @Autowired
-  private DefaultAuthenticationSuccessHandler authenticationSuccessHandler;
+  private SimpleUrlAuthenticationFailureHandler failureHandler;
+
+  @Autowired
+  private SimpleUrlAuthenticationSuccessHandler successHandler;
 
   @Override
-  protected AuthenticationType getAuthType() {
+  public AuthenticationType getAuthType() {
     return mobile;
   }
 
-
   @Override
   public void configure(HttpSecurity builder) {
-    String processUrlKey = mobile.getName() + "ProcessUrl";
-    String paramKey = mobile.getName() + "ParamName";
 
-    Map<String, String> props = new HashMap<>();
+    final String processUrlKey = mobile.getName() + "ProcessUrl";
+    final String paramKey = mobile.getName() + "ParamName";
 
-    String processUrl = props.get(processUrlKey);
-    String paramName = props.get(paramKey);
+    final String processUrl = properties.get(processUrlKey);
+    final String paramName = properties.get(paramKey);
 
 
-    MobileAuthenticationFilter mobileAuthenticationFilter = new MobileAuthenticationFilter(processUrl, paramName);
+    MobileAuthenticationFilter mobileAuthenticationFilter =
+        new MobileAuthenticationFilter(processUrl, paramName);
 
     mobileAuthenticationFilter.setAuthenticationManager(builder.getSharedObject(AuthenticationManager.class));
-    mobileAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
-    mobileAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailedHandler);
+    mobileAuthenticationFilter.setAuthenticationSuccessHandler(successHandler);
+    mobileAuthenticationFilter.setAuthenticationFailureHandler(failureHandler);
 
     MobileAuthenticationProvider authenticationProvider = new MobileAuthenticationProvider(userDetailsService);
 
-
     builder.authenticationProvider(authenticationProvider)
-        .addFilterAfter(mobileAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(mobileAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
   }
 
 

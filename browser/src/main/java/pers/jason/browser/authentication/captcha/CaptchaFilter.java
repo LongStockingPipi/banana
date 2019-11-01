@@ -1,4 +1,4 @@
-package pers.jason.browser.authentication;
+package pers.jason.browser.authentication.captcha;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import static pers.jason.core.support.HttpRequestMethod.POST;
  * @Date 2019/10/30 9:10
  */
 @Component
-public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
+public class CaptchaFilter extends OncePerRequestFilter implements InitializingBean {
 
   private final AntPathMatcher pathMatcher = new AntPathMatcher();
 

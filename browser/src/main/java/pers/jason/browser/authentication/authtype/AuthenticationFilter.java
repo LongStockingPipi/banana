@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class AuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-
   protected AuthenticationFilter(String processUrl) {
     super(processUrl);
   }
@@ -19,5 +18,7 @@ public abstract class AuthenticationFilter extends AbstractAuthenticationProcess
   protected String obtainParam(HttpServletRequest request, String param) {
     return request.getParameter(param);
   }
+
+
 
 }

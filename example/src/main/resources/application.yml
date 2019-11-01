@@ -23,5 +23,7 @@ security:
   requestUriWithAjax: /api
   loginPage: /page/login
   welcomePage: /page/index
-  authRequestUri: /api/auth
+  authRequestUri: /api/auth/mobile
   useCaptcha: true
+  authType: mobile
+  needCaptcha: false

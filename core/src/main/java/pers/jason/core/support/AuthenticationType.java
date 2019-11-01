@@ -10,20 +10,23 @@ public enum AuthenticationType {
   /**
    * mobile num + SMS
    */
-  mobile(1, "mobile"),
+  mobile(1, "mobile", true),
 
   /**
    * username + passwd (maybe need captcha)
    */
-  account(2, "account");
+  account(2, "account", false);
 
   private Integer code;
 
   private String name;
 
-  AuthenticationType(Integer code, String name) {
+  private Boolean needCaptcha;
+
+  AuthenticationType(Integer code, String name, Boolean needCaptcha) {
     this.code = code;
     this.name = name;
+    this.needCaptcha = needCaptcha;
   }
 
   public Integer getCode() {
@@ -40,5 +43,13 @@ public enum AuthenticationType {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Boolean getNeedCaptcha() {
+    return needCaptcha;
+  }
+
+  public void setNeedCaptcha(Boolean needCaptcha) {
+    this.needCaptcha = needCaptcha;
   }
 }

@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import pers.jason.browser.authentication.AuthFilterConfig;
+import pers.jason.browser.authentication.captcha.CaptchaFilterConfig;
 import pers.jason.browser.authentication.authtype.AuthenticationTypeConfig;
 import pers.jason.core.property.SecurityProperties;
 
@@ -20,8 +20,10 @@ import java.util.Map;
 @Configuration
 public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
+  private final String serviceNameSuffix = "AuthenticationConfig";
+
   @Autowired
-  private AuthFilterConfig authFilterConfig;
+  private CaptchaFilterConfig captchaFilterConfig;
 
   @Autowired
   private SecurityProperties securityProperties;
@@ -37,11 +39,18 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    String configName = securityProperties.getAuthType();
-    AuthenticationTypeConfig authenticationTypeConfig = authenticationTypeConfigMap.get(configName);
+
+    final String authTypeConfigName = securityProperties.getAuthType() + serviceNameSuffix;
+    AuthenticationTypeConfig authenticationTypeConfig = authenticationTypeConfigMap.get(authTypeConfigName);
+    if(null == authenticationTypeConfig) {
+      throw new RuntimeException("invalid authentication method: " + securityProperties.getAuthType());
+    }
+
+    if(needCaptcha(authenticationTypeConfig)) {
+      http.apply(captchaFilterConfig);
+    }
+
     http
-        .apply(authFilterConfig)
-        .and()
         .apply(authenticationTypeConfig)
         .and()
         //username and password authentication configuration
@@ -56,13 +65,22 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
         .and()
         .authorizeRequests()
         .antMatchers(securityProperties.getLoginPage(), securityProperties.getAuthRequestUri()
-            , "/captcha/*", "/captcha/validate/*/**")
+            , "/captcha/*", "/captcha/validate/*/**", "/captcha/sms")
         .permitAll()
         .anyRequest()
         .authenticated()
         .and()
         .csrf().disable()
         ;
+  }
+
+  private Boolean needCaptcha(AuthenticationTypeConfig authenticationTypeConfig) {
+    boolean configurationNeedCaptcha = securityProperties.getNeedCaptcha();
+    boolean attributesNeedAuth = authenticationTypeConfig.getAuthType().getNeedCaptcha();
+    if(!configurationNeedCaptcha & !attributesNeedAuth) {
+      return false;
+    }
+    return true;
   }
 
 }

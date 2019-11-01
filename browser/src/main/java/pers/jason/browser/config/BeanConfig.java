@@ -13,6 +13,9 @@ import pers.jason.browser.authentication.DefaultAuthenticationFailedHandler;
 import pers.jason.browser.authentication.DefaultAuthenticationSuccessHandler;
 import pers.jason.browser.authentication.captcha.sms.SmsCaptchaGenerator;
 import pers.jason.core.property.SecurityProperties;
+import pers.jason.core.support.Properties;
+
+import java.io.IOException;
 
 /**
  * @Author 姜治昊
@@ -31,6 +34,14 @@ public class BeanConfig {
   @Bean
   public PasswordEncoder passwordEncoder(){
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public Properties globalProperties() throws IOException {
+    final String conf = "banana-security.properties";
+    String conPath = System.getProperty("user.dir") + "\\example\\src\\main\\resources\\" + conf;
+    Properties properties = new Properties(null, conPath);
+    return properties;
   }
 
   @Bean

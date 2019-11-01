@@ -1,4 +1,4 @@
-package pers.jason.browser.authentication.captcha;
+package pers.jason.browser.authentication.captcha.sms;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -11,11 +11,12 @@ import pers.jason.core.property.SecurityProperties;
 
 /**
  * @Author 姜治昊
- * @Description
+ * @Description  TODO: If you don't need SMS verification code, then these beans should not be injected into the
+ *                    spring container, we can use @Conditional to achieve
  * @Date 2019/10/30 16:15
  */
 @Configuration
-public class CaptchaConfig {
+public class SmsCaptchaBeanConfig {
 
   @Autowired
   private SecurityProperties securityProperties;
