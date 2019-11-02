@@ -1,4 +1,4 @@
-package pers.jason.browser.authentication.captcha.sms;
+package pers.jason.browser.authentication.captcha.image;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -7,44 +7,31 @@ import pers.jason.browser.authentication.captcha.Captcha;
 import pers.jason.browser.authentication.captcha.CaptchaGenerator;
 import pers.jason.browser.authentication.captcha.NumbericCaptchaProcessor;
 import pers.jason.browser.authentication.support.CodeType;
-import pers.jason.core.notification.SimpleSmsNotification;
 import pers.jason.core.property.SecurityProperties;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
-import static pers.jason.browser.authentication.support.CodeType.sms;
+import static pers.jason.browser.authentication.support.CodeType.image;
 
 /**
  * @Author 姜治昊
  * @Description
- * @Date 2019/10/30 10:11
+ * @Date 2019/11/1 18:32
  */
 @Component
-public class SmsCaptchaProcessor extends NumbericCaptchaProcessor {
+public class ImageCaptchaProcessor extends NumbericCaptchaProcessor {
 
   @Autowired
-  private SmsCaptchaGenerator captchaGenerator;
+  private ImageCaptchaGenerator imageCaptchaGenerator;
 
   @Autowired
   private SecurityProperties securityProperties;
 
-  @Autowired
-  private SimpleSmsNotification smsNotification;
-
-  @Override
-  public CaptchaGenerator getCaptchaGenerator() {
-    return captchaGenerator;
-  }
-
-  @Override
-  protected void send(ServletWebRequest webRequest, Captcha captcha) {
-    String tel = obtainParamTel(webRequest.getRequest());
-    smsNotification.sendSms(tel, captcha.getValue());
-  }
-
   @Override
   protected CodeType getCaptchaType() {
-    return sms;
+    return image;
   }
 
   @Override
@@ -52,8 +39,14 @@ public class SmsCaptchaProcessor extends NumbericCaptchaProcessor {
     return request.getParameter(securityProperties.getValidateCodeParamName());
   }
 
-  private String obtainParamTel(HttpServletRequest request) {
-    return request.getParameter(securityProperties.getMobileNumParamName());
+  @Override
+  protected CaptchaGenerator getCaptchaGenerator() {
+    return imageCaptchaGenerator;
   }
 
+  @Override
+  protected void send(ServletWebRequest webRequest, Captcha captcha) throws IOException {
+    ImageCaptcha imageCaptcha = (ImageCaptcha) captcha;
+    ImageIO.write(imageCaptcha.getImage(), "JPEG", webRequest.getResponse().getOutputStream());
+  }
 }

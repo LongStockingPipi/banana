@@ -36,11 +36,6 @@ public class SecurityProperties {
   private String authType = "account";
 
   /**
-   * 是否开启校验码认证
-   */
-  private Boolean useCaptcha = false;
-
-  /**
    * 短信验证码长度
    */
   private Integer smsCodeLength = 4;
@@ -60,7 +55,13 @@ public class SecurityProperties {
    */
   private String mobileNumParamName = "mobile";
 
-  private Boolean needCaptcha = false;
+  private Boolean needCaptcha = true;
+
+  private Integer imageCaptchaWidth = 65;
+
+  private Integer imageCaptchaHeight = 25;
+
+  private String captchaType="image";
 
 
   public String getRequestUriWithAjax() {
@@ -128,14 +129,6 @@ public class SecurityProperties {
     this.mobileNumParamName = mobileNumParamName;
   }
 
-  public Boolean getUseCaptcha() {
-    return useCaptcha;
-  }
-
-  public void setUseCaptcha(Boolean useCaptcha) {
-    this.useCaptcha = useCaptcha;
-  }
-
   public String getAuthType() {
     return authType;
   }
@@ -150,5 +143,29 @@ public class SecurityProperties {
 
   public void setNeedCaptcha(Boolean needCaptcha) {
     this.needCaptcha = needCaptcha;
+  }
+
+  public Integer getImageCaptchaHeight() {
+    return imageCaptchaHeight;
+  }
+
+  public void setImageCaptchaHeight(Integer imageCaptchaHeight) {
+    this.imageCaptchaHeight = imageCaptchaHeight;
+  }
+
+  public Integer getImageCaptchaWidth() {
+    return imageCaptchaWidth;
+  }
+
+  public void setImageCaptchaWidth(Integer imageCaptchaWidth) {
+    this.imageCaptchaWidth = imageCaptchaWidth;
+  }
+
+  public String getCaptchaType() {
+    return captchaType;
+  }
+
+  public void setCaptchaType(String captchaType) {
+    this.captchaType = captchaType;
   }
 }

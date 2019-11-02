@@ -7,13 +7,6 @@
 <body>
 
     <h1>login page</h1>
-
-    <form>
-        用户名：<input type="text" name="username" id="username" value="qwert"/>
-        密码：<input type="password" name="password" id="passwd" value="123456"/>
-        <input type="button" value="login" th:onclick="'javascript:login()'"/>
-    </form>
-
     <hr/>
 
     <form>
@@ -60,30 +53,6 @@
         })
     }
 
-    function login() {
-        let username = $("#username").val();
-        let passwd = $("#passwd").val();
-
-        if(null == username || '' == username || username.length < 1) {
-            alert("username can not ne null");
-            return;
-        }
-
-        if(null == passwd || '' == passwd || passwd.length < 1) {
-            alert("username can not ne null");
-            return;
-        }
-
-        let url = '/api/auth';
-        $.post(url, {username: username, password: passwd}, function (data) {
-            console.info(data);
-            if(data.success == true) {
-                window.location.href = "/page/index";
-            } else {
-                alert('login failed!');
-            }
-        })
-    }
 
     /*]]>*/
     </script>

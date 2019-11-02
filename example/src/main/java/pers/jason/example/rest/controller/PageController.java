@@ -2,6 +2,7 @@ package pers.jason.example.rest.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -18,9 +19,9 @@ public class PageController {
     return "index";
   }
 
-  @GetMapping("login")
-  public String gotoLoginPage() {
-    return "login";
+  @GetMapping("login/{type}")
+  public String gotoLoginPage(@PathVariable("type") String type) {
+    return "login_" + type;
   }
 
 }

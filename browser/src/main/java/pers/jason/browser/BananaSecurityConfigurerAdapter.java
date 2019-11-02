@@ -42,17 +42,15 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
 
     final String authTypeConfigName = securityProperties.getAuthType() + serviceNameSuffix;
     AuthenticationTypeConfig authenticationTypeConfig = authenticationTypeConfigMap.get(authTypeConfigName);
-    if(null == authenticationTypeConfig) {
-      throw new RuntimeException("invalid authentication method: " + securityProperties.getAuthType());
+    if(null != authenticationTypeConfig) {
+      http.apply(authenticationTypeConfig);
     }
 
     if(needCaptcha(authenticationTypeConfig)) {
       http.apply(captchaFilterConfig);
     }
 
-    http
-        .apply(authenticationTypeConfig)
-        .and()
+      http
         //username and password authentication configuration
         .formLogin()
         .loginPage(securityProperties.getLoginPage())
@@ -65,7 +63,7 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
         .and()
         .authorizeRequests()
         .antMatchers(securityProperties.getLoginPage(), securityProperties.getAuthRequestUri()
-            , "/captcha/*", "/captcha/validate/*/**", "/captcha/sms")
+            , "/captcha/*", "/captcha/validate/*/**", "/captcha/sms", "/captcha/image")
         .permitAll()
         .anyRequest()
         .authenticated()
@@ -76,11 +74,10 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
 
   private Boolean needCaptcha(AuthenticationTypeConfig authenticationTypeConfig) {
     boolean configurationNeedCaptcha = securityProperties.getNeedCaptcha();
-    boolean attributesNeedAuth = authenticationTypeConfig.getAuthType().getNeedCaptcha();
-    if(!configurationNeedCaptcha & !attributesNeedAuth) {
-      return false;
-    }
-    return true;
+    boolean attributesNeedAuth =
+        null != authenticationTypeConfig ?authenticationTypeConfig.getAuthType().getNeedCaptcha() : false;
+
+    return configurationNeedCaptcha || attributesNeedAuth;
   }
 
 }

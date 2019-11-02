@@ -2,12 +2,14 @@ package pers.jason.browser.authentication.captcha;
 
 import org.springframework.web.context.request.ServletWebRequest;
 
+import java.io.IOException;
+
 /**
  * @Author 姜治昊
  * @Description
  * @Date 2019/10/30 9:27
  */
-public abstract class AbstractCaptchaProcessor {
+public abstract class AbstractCaptchaProcessor<T extends Captcha> {
 
   protected static final String VALIDATE_CODE_PREFIX = "validateCode_";
 
@@ -35,9 +37,9 @@ public abstract class AbstractCaptchaProcessor {
    * @param webRequest
    * @param captcha
    */
-  protected abstract void send(ServletWebRequest webRequest, Captcha captcha);
+  protected abstract void send(ServletWebRequest webRequest, Captcha captcha) throws IOException;
 
-  public final void requestCaptcha(ServletWebRequest webRequest) {
+  public final void requestCaptcha(ServletWebRequest webRequest) throws IOException {
     Captcha captcha = getCaptchaGenerator().generate();
     save(webRequest, captcha);
     send(webRequest, captcha);

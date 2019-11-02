@@ -21,9 +21,15 @@ spring:
 #banana security config
 security:
   requestUriWithAjax: /api
-  loginPage: /page/login
   welcomePage: /page/index
-  authRequestUri: /api/auth/mobile
-  useCaptcha: true
+  needCaptcha: true
+
+  loginPage: /page/login/mobile
   authType: mobile
-  needCaptcha: false
+  authRequestUri: /api/auth/mobile
+  captchaType: sms
+  # authentication by username and password(maybe captcha)
+  #  loginPage: /page/login/account
+  #  authType: account
+  #  authRequestUri: /api/auth/account
+  #  captchaType: image

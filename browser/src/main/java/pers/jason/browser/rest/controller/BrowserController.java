@@ -11,6 +11,7 @@ import pers.jason.browser.authentication.support.CodeType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -27,7 +28,7 @@ public class BrowserController {
   private Map<String, AbstractCaptchaProcessor> processorMap;
 
   @GetMapping("captcha/{type}")
-  public void code(@PathVariable("type") String type, HttpServletRequest request, HttpServletResponse response) {
+  public void code(@PathVariable("type") String type, HttpServletRequest request, HttpServletResponse response) throws IOException {
     if(StringUtils.isEmpty(type)) {
       throw new RuntimeException("param type can not be null!");
     }
