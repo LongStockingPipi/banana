@@ -77,15 +77,11 @@ public class UserServiceImpl implements UserService {
     logger.debug("auth request: " + s);
 
     if(StringUtils.isEmpty( s)) {
-      throw new AuthenticationFailedException("username can not be null");
+      return null;
     }
     User user = usernameAndPassWd.get(s);
     if(null == user) {
       user = mobileAndUser.get(s);
-    }
-
-    if(null == user || null == user.getId()) {
-      throw new AuthenticationFailedException("no user username or phone number is '" + s + " '");
     }
     return user;
   }

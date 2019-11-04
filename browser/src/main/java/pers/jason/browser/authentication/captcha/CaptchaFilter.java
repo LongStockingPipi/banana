@@ -42,10 +42,13 @@ public class CaptchaFilter extends OncePerRequestFilter implements InitializingB
   protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse
       , FilterChain filterChain) throws ServletException, IOException {
 
+    logger.debug("auth uri:" + securityProperties.getAuthRequestUri());
+    logger.debug("request uri:" + httpServletRequest.getRequestURI());
+
     if(pathMatcher.match(securityProperties.getAuthRequestUri(), httpServletRequest.getRequestURI())) {
 
       String captchaType = securityProperties.getCaptchaType();
-      if(securityProperties.getNeedCaptcha() && StringUtils.isEmpty(captchaType)) {
+      if(StringUtils.isEmpty(captchaType)) {
         logger.error("no valid processor can register");
         throw new RuntimeException("no valid processor can register");
       }

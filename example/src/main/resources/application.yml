@@ -22,7 +22,7 @@ spring:
 security:
   requestUriWithAjax: /api
   welcomePage: /page/index
-  needCaptcha: true
+  needCaptcha: false
 
   loginPage: /page/login/mobile
   authType: mobile

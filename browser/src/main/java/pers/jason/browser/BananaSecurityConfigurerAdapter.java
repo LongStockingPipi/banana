@@ -1,5 +1,7 @@
 package pers.jason.browser;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,6 +39,8 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
   @Autowired
   private Map<String, AuthenticationTypeConfig> authenticationTypeConfigMap;
 
+  private static final Logger logger = LoggerFactory.getLogger(BananaSecurityConfigurerAdapter.class);
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
@@ -47,6 +51,7 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
     }
 
     if(needCaptcha(authenticationTypeConfig)) {
+      logger.info("add captcha filter config");
       http.apply(captchaFilterConfig);
     }
 
