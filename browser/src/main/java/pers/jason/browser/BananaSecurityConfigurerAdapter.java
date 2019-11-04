@@ -8,9 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import pers.jason.browser.authentication.captcha.CaptchaFilterConfig;
 import pers.jason.browser.authentication.authtype.AuthenticationTypeConfig;
-import pers.jason.core.property.SecurityProperties;
+import pers.jason.browser.authentication.captcha.CaptchaFilterConfig;
+import pers.jason.core.property.BananaProperties;
 
 import java.util.Map;
 
@@ -28,9 +28,6 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
   private CaptchaFilterConfig captchaFilterConfig;
 
   @Autowired
-  private SecurityProperties securityProperties;
-
-  @Autowired
   private SimpleUrlAuthenticationFailureHandler defaultAuthenticationFailedHandler;
 
   @Autowired
@@ -39,50 +36,63 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
   @Autowired
   private Map<String, AuthenticationTypeConfig> authenticationTypeConfigMap;
 
+  @Autowired
+  private BananaProperties bananaProperties;
+
   private static final Logger logger = LoggerFactory.getLogger(BananaSecurityConfigurerAdapter.class);
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
-    final String authTypeConfigName = securityProperties.getAuthType() + serviceNameSuffix;
-    AuthenticationTypeConfig authenticationTypeConfig = authenticationTypeConfigMap.get(authTypeConfigName);
-    if(null != authenticationTypeConfig) {
+    logger.debug("configuring custom authentication");
+    for(String authType : authenticationTypeConfigMap.keySet()) {
+      AuthenticationTypeConfig authenticationTypeConfig = authenticationTypeConfigMap.get(authType);
       http.apply(authenticationTypeConfig);
     }
 
-    if(needCaptcha(authenticationTypeConfig)) {
-      logger.info("add captcha filter config");
-      http.apply(captchaFilterConfig);
-    }
+    String[] uris = getPermitUri();
 
-      http
-        //username and password authentication configuration
-        .formLogin()
-        .loginPage(securityProperties.getLoginPage())
-        .loginProcessingUrl(securityProperties.getAuthRequestUri())
-        .permitAll()
-        .successHandler(defaultAuthenticationSuccessHandler)
-        .failureHandler(defaultAuthenticationFailedHandler)
+    http
+        //general configuration
+      .apply(captchaFilterConfig)
+      .and()
 
-        //universal configuration
-        .and()
-        .authorizeRequests()
-        .antMatchers(securityProperties.getLoginPage(), securityProperties.getAuthRequestUri()
-            , "/captcha/*", "/captcha/validate/*/**", "/captcha/sms", "/captcha/image", "/**/*.js", "/**/*.css", "/**/*.jpg")
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .csrf().disable()
-        ;
+      //username and password authentication configuration
+      .formLogin()
+      .loginPage(bananaProperties.getAuth().getLoginPage())
+      .loginProcessingUrl(bananaProperties.getAuth().getSignInUrl())
+      .permitAll()
+      .successHandler(defaultAuthenticationSuccessHandler)
+      .failureHandler(defaultAuthenticationFailedHandler)
+
+      //universal configuration
+      .and()
+      .authorizeRequests()
+      .antMatchers(uris)
+      .permitAll()
+      .anyRequest()
+      .authenticated()
+      .and()
+      .csrf().disable()
+      ;
   }
 
-  private Boolean needCaptcha(AuthenticationTypeConfig authenticationTypeConfig) {
-    boolean configurationNeedCaptcha = securityProperties.getNeedCaptcha();
-    boolean attributesNeedAuth =
-        null != authenticationTypeConfig ?authenticationTypeConfig.getAuthType().getNeedCaptcha() : false;
+  protected String[] getPermitUri() {
+    String[] uris = new String[7];
 
-    return configurationNeedCaptcha || attributesNeedAuth;
+    //signIn loginPage system request
+    uris[0] = bananaProperties.getAuth().getLoginPage();
+    uris[1] = bananaProperties.getAuth().getSignInUrl();
+
+    //js css static resource
+    uris[2] = "/**/*.js";
+    uris[3] = "/**/*.css";
+    uris[4] = "/**/*.jpg";
+
+    //captcha
+    uris[5] = "/captcha/sms";
+    uris[6] = "/captcha/image";
+    return uris;
   }
 
 }

@@ -52,7 +52,7 @@ canvas{z-index:-1;position:absolute;}
     return;
    }
 
-   let url = '/api/auth/account';
+   let url = '/auth/account';
    $.post(url, {username: username, password: passwd, validate_code: code}, function (data) {
     console.info(data);
     if(data.success == true) {

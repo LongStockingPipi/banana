@@ -32,3 +32,21 @@ security:
   authRequestUri: /api/auth/mobile
   captchaType: sms
 #   authentication by username and password(maybe captcha)
+
+banana:
+  security:
+    auth:
+      signInUrl: /auth/account
+      loginPage: /page/auth/account
+      loginRequestType: ajax
+    captcha:
+      sms:
+        length: 4
+        uri: /api/auth/mobile,/auth/mobile
+        requestUri: /captcha/sms
+      image:
+        width: 118
+        height: 42
+        length: 6
+        uri: /api/auth/account,/auth/account
+        requestUri: /captcha/image
