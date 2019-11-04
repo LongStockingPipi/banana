@@ -21,7 +21,7 @@ public class PageController {
 
   @GetMapping("login/{type}")
   public String gotoLoginPage(@PathVariable("type") String type) {
-    return "login_" + type;
+    return type + "/login";
   }
 
 }

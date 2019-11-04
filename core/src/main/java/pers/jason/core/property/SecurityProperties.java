@@ -38,7 +38,7 @@ public class SecurityProperties {
   /**
    * 短信验证码长度
    */
-  private Integer smsCodeLength = 4;
+  private Integer smsCodeLength = 6;
 
   /**
    * 验证码参数名
@@ -57,9 +57,9 @@ public class SecurityProperties {
 
   private Boolean needCaptcha = true;
 
-  private Integer imageCaptchaWidth = 65;
+  private Integer imageCaptchaWidth = 118;
 
-  private Integer imageCaptchaHeight = 25;
+  private Integer imageCaptchaHeight = 42;
 
   private String captchaType="image";
 

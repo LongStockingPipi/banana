@@ -22,14 +22,13 @@ spring:
 security:
   requestUriWithAjax: /api
   welcomePage: /page/index
-  needCaptcha: false
-
+  needCaptcha: true
+#  loginPage: /page/login/account
+#  authType: account
+#  authRequestUri: /api/auth/account
+#  captchaType: image
   loginPage: /page/login/mobile
   authType: mobile
   authRequestUri: /api/auth/mobile
   captchaType: sms
-  # authentication by username and password(maybe captcha)
-  #  loginPage: /page/login/account
-  #  authType: account
-  #  authRequestUri: /api/auth/account
-  #  captchaType: image
+#   authentication by username and password(maybe captcha)

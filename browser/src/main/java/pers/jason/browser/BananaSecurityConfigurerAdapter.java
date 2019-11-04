@@ -68,7 +68,7 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
         .and()
         .authorizeRequests()
         .antMatchers(securityProperties.getLoginPage(), securityProperties.getAuthRequestUri()
-            , "/captcha/*", "/captcha/validate/*/**", "/captcha/sms", "/captcha/image")
+            , "/captcha/*", "/captcha/validate/*/**", "/captcha/sms", "/captcha/image", "/**/*.js", "/**/*.css", "/**/*.jpg")
         .permitAll()
         .anyRequest()
         .authenticated()
