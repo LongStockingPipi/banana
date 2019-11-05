@@ -8,7 +8,7 @@ import pers.jason.browser.authentication.captcha.CaptchaGenerator;
 import pers.jason.browser.authentication.captcha.NumbericCaptchaProcessor;
 import pers.jason.browser.authentication.support.CodeType;
 import pers.jason.core.notification.SimpleSmsNotification;
-import pers.jason.core.property.SecurityProperties;
+import pers.jason.core.property.BananaProperties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +26,7 @@ public class SmsCaptchaProcessor extends NumbericCaptchaProcessor {
   private SmsCaptchaGenerator captchaGenerator;
 
   @Autowired
-  private SecurityProperties securityProperties;
+  private BananaProperties bananaProperties;
 
   @Autowired
   private SimpleSmsNotification smsNotification;
@@ -49,11 +49,11 @@ public class SmsCaptchaProcessor extends NumbericCaptchaProcessor {
 
   @Override
   protected String obtainValidateCode(HttpServletRequest request) {
-    return request.getParameter(securityProperties.getValidateCodeParamName());
+    return request.getParameter(bananaProperties.getCaptcha().getSms().getParamName());
   }
 
   private String obtainParamTel(HttpServletRequest request) {
-    return request.getParameter(securityProperties.getMobileNumParamName());
+    return request.getParameter(bananaProperties.getAuth().getTypes().get("mobile").getParamsName()[0]);
   }
 
 }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pers.jason.core.property.SecurityProperties;
+import pers.jason.core.property.BananaProperties;
 
 /**
  * @Author 姜治昊
@@ -15,12 +15,12 @@ import pers.jason.core.property.SecurityProperties;
 public class ImageCaptchaBeanConfig {
 
   @Autowired
-  private SecurityProperties securityProperties;
+  private BananaProperties bananaProperties;
 
   @Bean
   @ConditionalOnMissingBean({ImageCaptchaGenerator.class})
   public ImageCaptchaGenerator imageCaptchaGenerator() {
-    return new ImageCaptchaGenerator(securityProperties);
+    return new ImageCaptchaGenerator(bananaProperties);
   }
 
 }

@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pers.jason.browser.authentication.captcha.sms.SmsCaptchaGenerator;
 import pers.jason.core.notification.DefaultSmsSender;
 import pers.jason.core.notification.SimpleSmsNotification;
-import pers.jason.core.property.SecurityProperties;
+import pers.jason.core.property.BananaProperties;
 
 /**
  * @Author 姜治昊
@@ -19,7 +18,7 @@ import pers.jason.core.property.SecurityProperties;
 public class SmsCaptchaBeanConfig {
 
   @Autowired
-  private SecurityProperties securityProperties;
+  private BananaProperties bananaProperties;
 
   @Bean
   @ConditionalOnMissingBean({SimpleSmsNotification.class})
@@ -30,7 +29,7 @@ public class SmsCaptchaBeanConfig {
   @Bean
   @ConditionalOnMissingBean({SmsCaptchaGenerator.class})
   public SmsCaptchaGenerator smsCaptchaGenerator() {
-    return new SmsCaptchaGenerator(securityProperties);
+    return new SmsCaptchaGenerator(bananaProperties);
   }
 
 }

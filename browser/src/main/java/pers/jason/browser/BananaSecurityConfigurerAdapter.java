@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import pers.jason.browser.authentication.authtype.AuthenticationTypeConfig;
 import pers.jason.browser.authentication.captcha.CaptchaFilterConfig;
+import pers.jason.core.property.AuthenticationChannel;
 import pers.jason.core.property.BananaProperties;
 
 import java.util.Map;
@@ -51,6 +52,7 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
     }
 
     String[] uris = getPermitUri();
+    String defaultSignInRequestUri = bananaProperties.getAuth().getTypes().get("default").getAuthRequestUrl();
 
     http
         //general configuration
@@ -60,10 +62,14 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
       //username and password authentication configuration
       .formLogin()
       .loginPage(bananaProperties.getAuth().getLoginPage())
-      .loginProcessingUrl(bananaProperties.getAuth().getSignInUrl())
+      .loginProcessingUrl(defaultSignInRequestUri)
       .permitAll()
       .successHandler(defaultAuthenticationSuccessHandler)
       .failureHandler(defaultAuthenticationFailedHandler)
+
+      .and()
+      .logout()
+        .logoutUrl("/signout")
 
       //universal configuration
       .and()
@@ -78,21 +84,40 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
   }
 
   protected String[] getPermitUri() {
-    String[] uris = new String[7];
+
+    Map<String, AuthenticationChannel> channelMap = bananaProperties.getAuth().getTypes();
+    int len = channelMap.size();
+
+    String[] uris = new String[len + 6];
 
     //signIn loginPage system request
     uris[0] = bananaProperties.getAuth().getLoginPage();
-    uris[1] = bananaProperties.getAuth().getSignInUrl();
-
     //js css static resource
-    uris[2] = "/**/*.js";
-    uris[3] = "/**/*.css";
-    uris[4] = "/**/*.jpg";
+    uris[1] = "/**/*.js";
+    uris[2] = "/**/*.css";
+    uris[3] = "/**/*.jpg";
 
     //captcha
-    uris[5] = "/captcha/sms";
-    uris[6] = "/captcha/image";
+    uris[4] = "/captcha/sms";
+    uris[5] = "/captcha/image";
+
+    int i=6;
+    for(String key : channelMap.keySet()) {
+      AuthenticationChannel channel = channelMap.get(key);
+      if(null != channel) {
+        uris[i] = channel.getAuthRequestUrl();
+      }
+      i++;
+    }
+
+    printLog(uris);
     return uris;
+  }
+
+  private void printLog(String[] uris) {
+    for(String uri : uris) {
+      logger.info(uri);
+    }
   }
 
 }

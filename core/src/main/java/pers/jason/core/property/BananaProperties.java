@@ -14,6 +14,10 @@ public class BananaProperties {
 
   private AuthProperties auth;
 
+  private String welcomePage;
+
+  private SignOutProperties signOut;
+
   public CaptchaProperties getCaptcha() {
     return captcha;
   }
@@ -28,5 +32,21 @@ public class BananaProperties {
 
   public void setAuth(AuthProperties auth) {
     this.auth = auth;
+  }
+
+  public String getWelcomePage() {
+    return welcomePage;
+  }
+
+  public void setWelcomePage(String welcomePage) {
+    this.welcomePage = welcomePage;
+  }
+
+  public SignOutProperties getSignOut() {
+    return signOut;
+  }
+
+  public void setSignOut(SignOutProperties signOut) {
+    this.signOut = signOut;
   }
 }

@@ -35,16 +35,29 @@ security:
 
 banana:
   security:
+    welcomePage: /page/index
     auth:
-      signInUrl: /auth/account
-      loginPage: /page/auth/account
+      loginPage: /page/auth/mobile
       loginRequestType: ajax
+      types:
+        mobile:
+          #配置 Filter的processUrl和参数名
+          authRequestUrl: /auth/mobile
+          paramsName: mobile
+        default:
+          authRequestUrl: /auth/account
+          paramsName:
+    signOut:
+      signOutUrl: /signout
+      requestType: form
     captcha:
       sms:
+        paramName: validate_code
         length: 4
         uri: /api/auth/mobile,/auth/mobile
         requestUri: /captcha/sms
       image:
+        paramName: validate_code
         width: 118
         height: 42
         length: 6

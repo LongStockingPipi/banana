@@ -7,12 +7,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import pers.jason.browser.authentication.DefaultAuthenticationFailedHandler;
 import pers.jason.browser.authentication.DefaultAuthenticationSuccessHandler;
+import pers.jason.browser.authentication.DefaultSuccessSignOutHandler;
 import pers.jason.browser.authentication.captcha.sms.SmsCaptchaGenerator;
-import pers.jason.core.property.SecurityProperties;
+import pers.jason.core.property.BananaProperties;
 import pers.jason.core.support.Properties;
 
 import java.io.IOException;
@@ -29,7 +33,7 @@ public class BeanConfig {
   private ObjectMapper objectMapper;
 
   @Autowired
-  private SecurityProperties securityProperties;
+  private BananaProperties bananaProperties;
 
   @Bean
   public PasswordEncoder passwordEncoder(){
@@ -45,18 +49,18 @@ public class BeanConfig {
   }
 
   @Bean
-  @ConditionalOnMissingBean({SimpleUrlAuthenticationSuccessHandler.class})
+  @ConditionalOnMissingBean({AuthenticationSuccessHandler.class})
   public SimpleUrlAuthenticationSuccessHandler defaultAuthenticationSuccessHandler() {
     SimpleUrlAuthenticationSuccessHandler handler =
-        new DefaultAuthenticationSuccessHandler(objectMapper, securityProperties);
+        new DefaultAuthenticationSuccessHandler(objectMapper, bananaProperties);
     return handler;
   }
 
   @Bean
-  @ConditionalOnMissingBean({SimpleUrlAuthenticationFailureHandler.class})
+  @ConditionalOnMissingBean({AuthenticationFailureHandler.class})
   public SimpleUrlAuthenticationFailureHandler defaultAuthenticationFailedHandler() {
     SimpleUrlAuthenticationFailureHandler handler =
-        new DefaultAuthenticationFailedHandler(objectMapper, securityProperties);
+        new DefaultAuthenticationFailedHandler(objectMapper, bananaProperties);
     return handler;
   }
 
@@ -64,8 +68,16 @@ public class BeanConfig {
   @ConditionalOnMissingBean({SmsCaptchaGenerator.class})
   public SmsCaptchaGenerator smsCaptchaGenerator() {
     SmsCaptchaGenerator smsCaptchaGenerator =
-        new SmsCaptchaGenerator(securityProperties);
+        new SmsCaptchaGenerator(bananaProperties);
     return smsCaptchaGenerator;
+  }
+
+  @Bean
+  @ConditionalOnMissingBean({LogoutSuccessHandler.class})
+  public DefaultSuccessSignOutHandler signOutSuccessHandler() {
+    DefaultSuccessSignOutHandler successSignOutHandler =
+        new DefaultSuccessSignOutHandler(bananaProperties, objectMapper);
+    return successSignOutHandler;
   }
 
 }

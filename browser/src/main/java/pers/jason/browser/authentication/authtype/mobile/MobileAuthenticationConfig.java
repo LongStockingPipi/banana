@@ -9,8 +9,9 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import pers.jason.browser.authentication.authtype.AuthenticationTypeConfig;
+import pers.jason.core.property.AuthenticationChannel;
+import pers.jason.core.property.BananaProperties;
 import pers.jason.core.support.AuthenticationType;
-import pers.jason.core.support.Properties;
 
 import static pers.jason.core.support.AuthenticationType.mobile;
 
@@ -26,7 +27,7 @@ public class MobileAuthenticationConfig extends AuthenticationTypeConfig {
   private UserDetailsService userDetailsService;
 
   @Autowired
-  private Properties properties;
+  private BananaProperties bananaProperties;
 
   @Autowired
   private SimpleUrlAuthenticationFailureHandler failureHandler;
@@ -42,15 +43,14 @@ public class MobileAuthenticationConfig extends AuthenticationTypeConfig {
   @Override
   public void configure(HttpSecurity builder) {
 
-    final String processUrlKey = mobile.getName() + "ProcessUrl";
-    final String paramKey = mobile.getName() + "ParamName";
+    AuthenticationChannel mobileChannel = bananaProperties.getAuth().getTypes().get("mobile");
 
-    final String processUrl = properties.get(processUrlKey);
-    final String paramName = properties.get(paramKey);
+    final String mobileAuthRequestUrl = mobileChannel.getAuthRequestUrl();
 
+    final String paramName = mobileChannel.getParamsName()[0];
 
     MobileAuthenticationFilter mobileAuthenticationFilter =
-        new MobileAuthenticationFilter(processUrl, paramName);
+        new MobileAuthenticationFilter(mobileAuthRequestUrl, paramName);
 
     mobileAuthenticationFilter.setAuthenticationManager(builder.getSharedObject(AuthenticationManager.class));
     mobileAuthenticationFilter.setAuthenticationSuccessHandler(successHandler);
@@ -59,7 +59,7 @@ public class MobileAuthenticationConfig extends AuthenticationTypeConfig {
     MobileAuthenticationProvider authenticationProvider = new MobileAuthenticationProvider(userDetailsService);
 
     builder.authenticationProvider(authenticationProvider)
-        .addFilterBefore(mobileAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterAfter(mobileAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
   }
 
 

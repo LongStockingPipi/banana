@@ -7,7 +7,7 @@ import pers.jason.browser.authentication.captcha.Captcha;
 import pers.jason.browser.authentication.captcha.CaptchaGenerator;
 import pers.jason.browser.authentication.captcha.NumbericCaptchaProcessor;
 import pers.jason.browser.authentication.support.CodeType;
-import pers.jason.core.property.SecurityProperties;
+import pers.jason.core.property.BananaProperties;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class ImageCaptchaProcessor extends NumbericCaptchaProcessor {
   private ImageCaptchaGenerator imageCaptchaGenerator;
 
   @Autowired
-  private SecurityProperties securityProperties;
+  private BananaProperties bananaProperties;
 
   @Override
   protected CodeType getCaptchaType() {
@@ -36,7 +36,7 @@ public class ImageCaptchaProcessor extends NumbericCaptchaProcessor {
 
   @Override
   protected String obtainValidateCode(HttpServletRequest request) {
-    return request.getParameter(securityProperties.getValidateCodeParamName());
+    return request.getParameter(bananaProperties.getCaptcha().getImage().getParamName());
   }
 
   @Override

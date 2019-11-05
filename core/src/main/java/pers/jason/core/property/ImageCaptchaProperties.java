@@ -22,6 +22,8 @@ public class ImageCaptchaProperties {
 
   private String requestUri = "/captcha";
 
+  private String paramName = "validateCode";
+
   public Integer getLength() {
     return length;
   }
@@ -68,5 +70,13 @@ public class ImageCaptchaProperties {
 
   public void setRequestUri(String requestUri) {
     this.requestUri = requestUri;
+  }
+
+  public String getParamName() {
+    return paramName;
+  }
+
+  public void setParamName(String paramName) {
+    this.paramName = paramName;
   }
 }

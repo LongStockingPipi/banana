@@ -63,7 +63,7 @@
 			return;
 		}
 
-		let url = '/api/auth/mobile';
+		let url = '/auth/mobile';
 		$.post(url, {mobile: mobile, validate_code: code}, function (data) {
 			console.info(data);
 			if(data.success == true) {

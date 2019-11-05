@@ -1,11 +1,14 @@
 package pers.jason.browser.authentication.authtype.mobile;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 /**
  * @Author 姜治昊
@@ -13,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @Date 2019/10/31 10:53
  */
 public class MobileAuthenticationProvider implements AuthenticationProvider {
+
+  private static final Logger logger = LoggerFactory.getLogger(MobileAuthenticationProvider.class);
 
   private UserDetailsService userDetailsService;
 
@@ -28,6 +33,8 @@ public class MobileAuthenticationProvider implements AuthenticationProvider {
    */
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+
+    logger.info("into mobile auth provider.authenticate() ...");
     MobileAuthenticationToken authenticationToken = (MobileAuthenticationToken) authentication;
 
     String principal = (String) authenticationToken.getPrincipal();
@@ -45,6 +52,8 @@ public class MobileAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public boolean supports(Class<?> authentication) {
-    return MobileAuthenticationToken.class.isAssignableFrom(authentication);
+    boolean wasSupport = MobileAuthenticationToken.class.isAssignableFrom(authentication);
+    logger.info("mobile auth provider support: {}", wasSupport);
+    return wasSupport;
   }
 }

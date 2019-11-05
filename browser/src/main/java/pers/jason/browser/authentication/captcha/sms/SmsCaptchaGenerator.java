@@ -3,7 +3,7 @@ package pers.jason.browser.authentication.captcha.sms;
 import org.apache.commons.lang.RandomStringUtils;
 import pers.jason.browser.authentication.captcha.Captcha;
 import pers.jason.browser.authentication.captcha.CaptchaGenerator;
-import pers.jason.core.property.SecurityProperties;
+import pers.jason.core.property.BananaProperties;
 
 /**
  * @Author 姜治昊
@@ -12,16 +12,16 @@ import pers.jason.core.property.SecurityProperties;
  */
 public class SmsCaptchaGenerator implements CaptchaGenerator {
 
-  private SecurityProperties securityProperties;
+  private BananaProperties bananaProperties;
 
-  public SmsCaptchaGenerator(SecurityProperties securityProperties) {
-    this.securityProperties = securityProperties;
+  public SmsCaptchaGenerator(BananaProperties bananaProperties) {
+    this.bananaProperties = bananaProperties;
   }
 
   @Override
   public Captcha generate() {
-    String code = RandomStringUtils.randomNumeric(securityProperties.getSmsCodeLength());
-    SmsCaptcha validateCode = new SmsCaptcha(securityProperties.getExpireTime(), code);
+    String code = RandomStringUtils.randomNumeric(bananaProperties.getCaptcha().getSms().getLength());
+    SmsCaptcha validateCode = new SmsCaptcha(bananaProperties.getCaptcha().getSms().getExpireIn(), code);
     return validateCode;
   }
 

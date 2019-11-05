@@ -1,8 +1,7 @@
 package pers.jason.browser.authentication.captcha.image;
 
-import pers.jason.browser.authentication.captcha.Captcha;
 import pers.jason.browser.authentication.captcha.CaptchaGenerator;
-import pers.jason.core.property.SecurityProperties;
+import pers.jason.core.property.BananaProperties;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,18 +14,19 @@ import java.util.Random;
  */
 public class ImageCaptchaGenerator implements CaptchaGenerator {
 
-  private SecurityProperties securityProperties;
+  private BananaProperties bananaProperties;
 
-  public ImageCaptchaGenerator(SecurityProperties securityProperties) {
-    this.securityProperties = securityProperties;
+  public ImageCaptchaGenerator(BananaProperties bananaProperties) {
+    this.bananaProperties = bananaProperties;
   }
 
   @Override
   public ImageCaptcha generate() {
 
     // TODO Auto-generated method stub
-    int width = securityProperties.getImageCaptchaWidth();
-    int height = securityProperties.getImageCaptchaHeight();
+    ;
+    int width = bananaProperties.getCaptcha().getImage().getWidth();
+    int height = bananaProperties.getCaptcha().getImage().getHeight();
 
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     Graphics g = image.getGraphics();
@@ -43,14 +43,14 @@ public class ImageCaptchaGenerator implements CaptchaGenerator {
       g.drawLine(x, y, x + xl, y + yl);
     }
     String sRand = "";
-    for (int i = 0; i < securityProperties.getSmsCodeLength(); i++) {
+    for (int i = 0; i < bananaProperties.getCaptcha().getImage().getLength(); i++) {
       String rand = String.valueOf(random.nextInt(10));
       sRand += rand;
       g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110)));
       g.drawString(rand, 13 * i + 6, 16);
     }
     g.dispose();
-    return new ImageCaptcha(securityProperties.getExpireTime(), sRand, image);
+    return new ImageCaptcha(bananaProperties.getCaptcha().getImage().getExpireIn(), sRand, image);
   }
 
   /**

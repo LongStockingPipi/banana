@@ -3,7 +3,6 @@ package pers.jason.core.config;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import pers.jason.core.property.BananaProperties;
-import pers.jason.core.property.SecurityProperties;
 
 /**
  * @Author 姜治昊
@@ -11,7 +10,7 @@ import pers.jason.core.property.SecurityProperties;
  * @Date 2019/10/29 9:14
  */
 @Configuration
-@EnableConfigurationProperties({SecurityProperties.class, BananaProperties.class})
+@EnableConfigurationProperties({BananaProperties.class})
 public class CoreConfig {
 
 }
