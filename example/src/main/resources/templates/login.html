@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+
+        <meta charset="utf-8"/>
+        <title>Fullscreen Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+
+        <!-- CSS -->
+        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'/>
+        <link rel="stylesheet" th:href="@{/assets/css/reset.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/css/supersized.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/css/style.css}"/>
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script th:src="@{http://html5shim.googlecode.com/svn/trunk/html5.js}"></script>
+        <![endif]-->
+
+    </head>
+
+    <body>
+
+        <div class="page-container">
+            <h1>Login</h1>
+            <form id="form_1" class="sign_in_1">
+                <input type="text" name="username" id="username" class="username" placeholder="Username"/>
+                <input type="password" name="password" id="password" class="password" placeholder="Password"/>
+				<div>
+					<input id="validateCode_image" type="text" name="code" class="text" placeholder="Image Code" style="width:45%;display:inline; float:left"/>
+					<div style="display:inline; width:40%; height:44px; float:right; margin-top:25px; margin-bottom:25px" align="center">
+						<img  th:src="@{/captcha/image}"/>
+					</div>
+				</div>
+                <button type="button" th:onclick="'javascript:login_account()'">登录</button>
+                <div id="account_error_msg" style="margin-top:10%; color: red"></div>
+            </form>
+
+            <form id="form_2" class="sign_in_2" style="display:none">
+                <input type="text" id="mobile" name="mobile" class="username" placeholder="Tel"/>
+                <div>
+                    <input type="text" name="validateCode_sms" id="validateCode_sms"
+                           class="text" placeholder="Captcha Code" style="width:45%;display:inline; float:left"/>
+                    <button type="button" style="display:inline; width:40%; float:right"
+                            th:onclick="'javascript:getCode()'">获取验证码</button>
+                </div>
+                <button type="button" th:onclick="'javascript:login_mobile()'">登录</button>
+                <div id="mobile_error_msg" style="margin-top:10%; color: red"></div>
+            </form>
+            <div class="connect" align="center">
+                <a style="width:30%" href="#" id="check_channel">Use Tel</a> <span>Or connect with:</span>
+                <p>
+                    <a class="facebook" href=""></a>
+                    <a class="twitter" href=""></a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Javascript -->
+        <script th:src="@{/assets/js/jquery-1.8.2.min.js}"></script>
+        <script th:src="@{/assets/js/supersized.3.2.7.min.js}"></script>
+        <script th:src="@{/assets/js/supersized-init.js}"></script>
+        <script th:src="@{/assets/js/scripts.js}"></script>
+        <script th:src="@{/assets/js/auth.js}"></script>
+
+    </body>
+
+</html>
+
