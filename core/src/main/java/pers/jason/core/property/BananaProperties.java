@@ -18,6 +18,8 @@ public class BananaProperties {
 
   private SignOutProperties signOut;
 
+  private SocialProperties social;
+
   public CaptchaProperties getCaptcha() {
     return captcha;
   }
@@ -48,5 +50,13 @@ public class BananaProperties {
 
   public void setSignOut(SignOutProperties signOut) {
     this.signOut = signOut;
+  }
+
+  public SocialProperties getSocial() {
+    return social;
+  }
+
+  public void setSocial(SocialProperties social) {
+    this.social = social;
   }
 }

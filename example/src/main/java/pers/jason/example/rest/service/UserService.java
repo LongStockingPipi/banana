@@ -11,4 +11,8 @@ public interface UserService {
 
   User findByUsernameOrPhoneNumber(String s);
 
+  void addUser(User user);
+
+  String loadUserByUserId(Long id);
+
 }

@@ -2,12 +2,14 @@ package pers.jason.example.auth;
 
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.PlaintextPasswordEncoder;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Service;
 import pers.jason.example.entity.User;
 import pers.jason.example.rest.service.UserService;
@@ -18,7 +20,7 @@ import pers.jason.example.rest.service.UserService;
  * @Date 2019/10/29 10:08
  */
 @Service
-public class MyUserDetailService implements UserDetailsService {
+public class MyUserDetailService implements UserDetailsService, SocialUserDetailsService {
 
   private final String NULL_PASSWD = "null";
 
@@ -30,6 +32,7 @@ public class MyUserDetailService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+
     User user = userService.findByUsernameOrPhoneNumber(s);
     boolean enabled = true;
     boolean accountNonExpired = true;
@@ -46,6 +49,17 @@ public class MyUserDetailService implements UserDetailsService {
     , credentialsNonExpired, accountNonLocked, AuthorityUtils.commaSeparatedStringToAuthorityList("admin")
     );
     return userDetails;
+  }
+
+  @Override
+  public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+    String password = getPassword(userId);
+    return new SocialUser(userId, password, true, true, true
+        , true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+  }
+
+  private String getPassword(String s) {
+    return "p_" + s + "_";
   }
 
 }

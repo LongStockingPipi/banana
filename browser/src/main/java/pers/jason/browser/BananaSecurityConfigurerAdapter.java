@@ -8,11 +8,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.social.security.SpringSocialConfigurer;
 import pers.jason.browser.authentication.authtype.AuthenticationTypeConfig;
 import pers.jason.browser.authentication.captcha.CaptchaFilterConfig;
 import pers.jason.core.property.AuthenticationChannel;
 import pers.jason.core.property.BananaProperties;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +31,9 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
 
   @Autowired
   private CaptchaFilterConfig captchaFilterConfig;
+
+  @Autowired
+  private SpringSocialConfigurer springSocialConfigurer;
 
   @Autowired
   private SimpleUrlAuthenticationFailureHandler defaultAuthenticationFailedHandler;
@@ -51,12 +58,16 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
       http.apply(authenticationTypeConfig);
     }
 
-    String[] uris = getPermitUri();
+    List<String> uris = getPermitUri();
     String defaultSignInRequestUri = bananaProperties.getAuth().getTypes().get("default").getAuthRequestUrl();
 
     http
-        //general configuration
+      //general configuration
       .apply(captchaFilterConfig)
+      .and()
+
+      //spring social
+      .apply(springSocialConfigurer)
       .and()
 
       //username and password authentication configuration
@@ -67,14 +78,15 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
       .successHandler(defaultAuthenticationSuccessHandler)
       .failureHandler(defaultAuthenticationFailedHandler)
 
+      //sign out
       .and()
       .logout()
-        .logoutUrl("/signout")
+      .logoutUrl("/signout")
 
       //universal configuration
       .and()
       .authorizeRequests()
-      .antMatchers(uris)
+      .antMatchers(uris.toArray(new String[uris.size()]))
       .permitAll()
       .anyRequest()
       .authenticated()
@@ -83,41 +95,38 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
       ;
   }
 
-  protected String[] getPermitUri() {
+  protected List<String> getPermitUri() {
+
+    List<String> uris = new ArrayList<>();
 
     Map<String, AuthenticationChannel> channelMap = bananaProperties.getAuth().getTypes();
-    int len = channelMap.size();
 
-    String[] uris = new String[len + 6];
 
-    //signIn loginPage system request
-    uris[0] = bananaProperties.getAuth().getLoginPage();
-    //js css static resource
-    uris[1] = "/**/*.js";
-    uris[2] = "/**/*.css";
-    uris[3] = "/**/*.jpg";
+    //login page
+    uris.add(bananaProperties.getAuth().getLoginPage());
 
-    //captcha
-    uris[4] = "/captcha/sms";
-    uris[5] = "/captcha/image";
+    //sign up page
+    uris.add(bananaProperties.getSocial().getSignUpPage());
 
-    int i=6;
+    uris.add(bananaProperties.getSocial().getSignUpRequestUrl());
+    uris.add(bananaProperties.getSocial().getBindingRequestUrl());
+
+    //captcha code request
+    uris.addAll(Arrays.asList("/captcha/sms", "/captcha/image"));
+
+    //static resources
+    uris.addAll(Arrays.asList("/**/*.js", "/**/*.css", "/**/*.jpg", "/**/*.gif", "/**/*.png"));
+
+    //authentication uri
     for(String key : channelMap.keySet()) {
       AuthenticationChannel channel = channelMap.get(key);
       if(null != channel) {
-        uris[i] = channel.getAuthRequestUrl();
+        uris.add(channel.getAuthRequestUrl());
       }
-      i++;
     }
 
-    printLog(uris);
     return uris;
   }
 
-  private void printLog(String[] uris) {
-    for(String uri : uris) {
-      logger.info(uri);
-    }
-  }
 
 }

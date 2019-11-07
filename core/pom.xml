@@ -39,25 +39,25 @@
         </dependency>
 
         <!-- spring social依赖（实现第三方登录） -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.social</groupId>-->
-<!--            <artifactId>spring-social-config</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-config</artifactId>
+        </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.social</groupId>-->
-<!--            <artifactId>spring-social-core</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-core</artifactId>
+        </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.social</groupId>-->
-<!--            <artifactId>spring-social-security</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-security</artifactId>
+        </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.social</groupId>-->
-<!--            <artifactId>spring-social-web</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-web</artifactId>
+        </dependency>
 
         <!-- common依赖（工具等） -->
         <dependency>

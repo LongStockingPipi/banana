@@ -15,14 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PageController {
 
   @GetMapping("index")
-  public String gotoIndexPage() {
+  public String gotoIndexPage2() {
     return "index";
   }
 
-  @GetMapping("auth/{type}")
-  public String gotoLoginPage(@PathVariable("type") String type) {
-//    return type + "/login";
+  @GetMapping("auth")
+  public String gotoLoginPage() {
     return "login";
+  }
+
+  @GetMapping("signup")
+  public String gotoSignUpPage() {
+    return "signup";
   }
 
 }

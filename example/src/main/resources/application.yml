@@ -1,6 +1,6 @@
 # server config
 server:
-  port: 8090
+  port: 80
 
 # log config
 logging:
@@ -9,35 +9,24 @@ logging:
 #spring config
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/banana?&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
-    driver-class-name: com.mysql.jdbc.Driver
-    username: root
-    password: Hongdou@521
-    hikari:
-      maximum-pool-size: 30
+    url: jdbc:h2:file:./db/banana
+    driver-class-name: org.h2.Driver
   thymeleaf:
     cache: false
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/banana?&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+#    driver-class-name: com.mysql.jdbc.Driver
+#    username: root
+#    password: Hongdou@521
+#    hikari:
+#      maximum-pool-size: 30
 
-#banana security config
-security:
-  requestUriWithAjax: /api
-  welcomePage: /page/index
-  needCaptcha: true
-#  loginPage: /page/login/account
-#  authType: account
-#  authRequestUri: /api/auth/account
-#  captchaType: image
-  loginPage: /page/login/mobile
-  authType: mobile
-  authRequestUri: /api/auth/mobile
-  captchaType: sms
-#   authentication by username and password(maybe captcha)
 
 banana:
   security:
     welcomePage: /page/index
     auth:
-      loginPage: /page/auth/mobile
+      loginPage: /page/auth
       loginRequestType: ajax
       types:
         mobile:
@@ -63,3 +52,14 @@ banana:
         length: 6
         uri: /api/auth/account,/auth/account
         requestUri: /captcha/image
+    social:
+      signUpPage: /page/signup
+      signUpRequestUrl: /user/signup
+      bindingRequestUrl: /user/binding
+      socials:
+        oicq:
+          appId: 101515942
+          app-secret: ddd6db3ef19c2963b54088059652ce75
+          providerId: oicq
+          processUrls: /auth
+
