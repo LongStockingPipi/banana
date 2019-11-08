@@ -12,6 +12,7 @@
     <properties>
         <core.version>0.0.1-SNAPSHOT</core.version>
         <browser.version>0.0.1-SNAPSHOT</browser.version>
+        <db.version>0.0.1-SNAPSHOT</db.version>
         <platform-bom.version>Cairo-SR7</platform-bom.version>
         <spring-cloud-dependencies.version>Finchley SR4</spring-cloud-dependencies.version>
     </properties>
@@ -21,6 +22,7 @@
         <module>core</module>
         <module>browser</module>
         <module>example</module>
+        <module>db</module>
     </modules>
 
     <dependencyManagement>

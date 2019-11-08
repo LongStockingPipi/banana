@@ -12,7 +12,7 @@
     <artifactId>example</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>example</name>
-    <description>web demo of use Banana security famework</description>
+    <description>web demo of use Banana security framework</description>
 
     <properties>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
@@ -56,7 +56,6 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-<!--            <version>8.0.15</version>-->
         </dependency>
 
         <!-- IO工具包 -->
@@ -96,21 +95,10 @@
             <scope>true</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.199</version>
-        </dependency>
+
+
+
 
     </dependencies>
-
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
 
 </project>

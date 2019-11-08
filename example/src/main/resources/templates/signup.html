@@ -27,14 +27,14 @@
 
 <div class="page-container">
     <h1>Sign Up</h1>
-<!--    <form th:url="/user/binding" method="post">-->
-    <form>
+    <form action="#" th:action="@{/user/binding}" method="post">
+<!--    <form>-->
         <input type="text" name="username" id="username" class="username" placeholder="Username"/>
         <input type="password" name="password" id="password" class="password" placeholder="Password"/>
         <input type="text" name="nickName" id="nickName" placeholder="NickName"/>
 <!--        <button type="button" th:onclick="'javascript:signup_account()'">注册</button>-->
-        <button type="button" th:onclick="'javascript:binding_account()'">绑定</button>
-<!--        <button type="submit">绑定</button>-->
+<!--        <button type="button" th:onclick="'javascript:binding_account()'">绑定</button>-->
+        <button type="submit">绑定</button>
         <div id="account_error_msg" style="margin-top:10%; color: red"></div>
     </form>
 </div>

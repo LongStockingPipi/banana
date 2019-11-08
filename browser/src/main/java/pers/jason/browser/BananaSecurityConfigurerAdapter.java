@@ -70,6 +70,8 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
       .apply(springSocialConfigurer)
       .and()
 
+      .headers().frameOptions().sameOrigin().and()
+
       //username and password authentication configuration
       .formLogin()
       .loginPage(bananaProperties.getAuth().getLoginPage())
@@ -115,7 +117,7 @@ public class BananaSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
     uris.addAll(Arrays.asList("/captcha/sms", "/captcha/image"));
 
     //static resources
-    uris.addAll(Arrays.asList("/**/*.js", "/**/*.css", "/**/*.jpg", "/**/*.gif", "/**/*.png"));
+    uris.addAll(Arrays.asList("/**/*.js", "/**/*.css", "/**/*.jpg", "/**/*.gif", "/**/*.png", "/**/*.svg"));
 
     //authentication uri
     for(String key : channelMap.keySet()) {
